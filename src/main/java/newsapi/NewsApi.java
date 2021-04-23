@@ -10,7 +10,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-public class NewsApi {
+public class NewsApi{
 
     public static final String DELIMITER = "&";
 
@@ -183,7 +183,7 @@ public class NewsApi {
                 if(!"ok".equals(newsReponse.getStatus())){
                     System.out.println("Error: "+newsReponse.getStatus());
                 }
-            } catch (JsonProcessingException e) {
+            } catch (JsonProcessingException e) { //ich muss diesen Fehler bis zum userinterface bringen. -> nicht hier try catch, throws exception, ->der nächste kümmert sich darum -> news api example
                 System.out.println("Error: "+e.getMessage());
             }
         }
