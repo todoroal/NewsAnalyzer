@@ -29,7 +29,7 @@ public class Controller {
 
 			System.out.println("Number of Articles: "+ getNumberOfArticle(articles));
 			System.out.println("Best Provider: " +getBestProvider(articles));
-			System.out.println("Title sorted by lenght:" + getTitlesSortedByLenght(articles).toString());
+			System.out.println("Shortes name (author):" + getShortestName(articles));
 
 
 		}else{
@@ -67,15 +67,28 @@ public class Controller {
 				.max(Map.Entry.comparingByValue()).orElseThrow(NoSuchElementException::new).getKey();
 	}
 
-	public String getShortesAuthorName(List<Article> data){
-		return data
-				.stream()
-				.min(Comparator.comparing(Article::getAuthor))
-				.toString();
+	public String getShortestName(List<Article> data) throws NewsAnalyzerException {
+		String authorShort;
+		try{
+			authorShort = data
+					.stream()
+					.collect(Collectors.groupingBy(article -> article.getSource().getName()))
+					.entrySet()
+					.stream()
+					.sorted()
+					.collect(Collectors.toList())
+					.toString();
+		}catch(Exception e){
+			throw new NewsAnalyzerException("No Such Element found");
+		}
+		return authorShort;
+				//.stream()
+				//.min(Comparator.comparing(Article::getAuthor))
+				//.toString();
 	}
 
 	public Object getData() {
-
+	
 
 		return null;
 	}
