@@ -11,11 +11,13 @@ import newsanalyzer.ctrl.NewsApiException;
 import newsapi.NewsApi;
 import newsapi.NewsApiBuilder;
 import newsapi.enums.Category;
+import newsapi.enums.Country;
 import newsapi.enums.Endpoint;
+
+
 
 public class UserInterface 
 {
-
 	private Controller ctrl = new Controller();
 
 	public void getDataFromCtrl1(){
@@ -67,31 +69,40 @@ public class UserInterface
 				.setDomains("com")
 				.setSourceCategory(Category.health)
 				.createNewsApi();
-
 		try {
 			ctrl.process(health);//newsApi_entertainment);
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (NewsApiException e) {
-			e.printStackTrace();
+			System.out.println(e.getMessage());
 		}
 	}
 
 
 	
-	public void getDataForCustomInput() {
-		
+	public void getDataFromCtrl4() {
+		System.out.println("Download...");
+
+		NewsApi health = new NewsApiBuilder()
+				.setApiKey(Controller.APIKEY)
+				.setQ("Health")
+				.setEndPoint(Endpoint.TOP_HEADLINES)
+				.setDomains("com")
+				.setSourceCategory(Category.health)
+				.createNewsApi();
+
+		ctrl.getAllUrls(health);
 	}
 
 
 	public void start() {
-		Menu<Runnable> menu = new Menu<>("User Interfacx");
+		Menu<Runnable> menu = new Menu<>("User Interface");
 		menu.setTitel("Wählen Sie aus:");
 		menu.insert("a", "Sports", this::getDataFromCtrl1); //Lambda notation
 		menu.insert("b", "Entertainment", this::getDataFromCtrl2);
 		menu.insert("c", "Health", this::getDataFromCtrl3);
 		//menu.insert("d", "Title sorted by length", this::getDataFromCtrl4);
-		menu.insert("d", "Download last search",this::getDataForCustomInput);
+		menu.insert("d", "Download last search",this::getDataFromCtrl4);
 		menu.insert("q", "Quit", null);
 		Runnable choice;
 		while ((choice = menu.exec()) != null) {
