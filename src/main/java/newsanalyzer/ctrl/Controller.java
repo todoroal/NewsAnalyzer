@@ -1,5 +1,6 @@
 package newsanalyzer.ctrl;
 
+import NewsReader.download.SequentialDownloader;
 import newsapi.NewsApi;
 import newsapi.beans.Article;
 import newsapi.beans.NewsReponse;
@@ -11,6 +12,20 @@ import java.util.stream.Collectors;
 public class Controller {
 
 	public static final String APIKEY = "538d94982e5444b78cfe15198c4786b2";
+
+	/*
+	public List<String> downloadUrlToList(NewsApi news){
+		NewsReponse newsReponse = news.getNews();
+		if(newsReponse != null){
+			List<Article> articles = newsReponse.getArticles();
+			List<String> urls;
+			articles.stream()
+					.filter(article -> Objects.nonNull(article.getUrl()))
+					.collect(Collectors.toList());
+		}
+	}*/
+
+
 
 	public void process(NewsApi stream) throws IOException, NewsApiException {
 		System.out.println("Start process");
@@ -42,6 +57,27 @@ public class Controller {
 		System.out.println("End process");
 	}
 
+	public void getAllUrls(NewsApi news){
+		System.out.println("Start process");
+
+		NewsReponse newsReponse = news.getNews();
+
+		List<String> urls;
+		if(newsReponse != null){
+			List<Article> articles = newsReponse.getArticles();
+			urls = articles.stream()
+					.map(Article::getUrl)
+					.filter(Objects::isNull)
+					.collect(Collectors.toList());
+
+			SequentialDownloader sequentialDownloader = new SequentialDownloader();
+			sequentialDownloader.process(urls);
+
+			System.out.println("All URLS: " + urls);
+		}
+	}
+
+
 	public List<Article> getTitlesSortedByLenght(List<Article> data){
 		return data
 				.stream()
@@ -61,8 +97,6 @@ public class Controller {
 				.stream()
 				.max(Map.Entry.comparingByValue()).orElseThrow(NoSuchElementException::new).getKey();
 	}
-
-
 
 	public List<Article> getShortestName(List<Article> data) throws NewsApiException {
 
