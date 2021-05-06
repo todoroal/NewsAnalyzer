@@ -5,18 +5,12 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
-import java.util.Comparator;
-import java.util.List;
-import java.util.stream.Collectors;
 
 import newsanalyzer.ctrl.Controller;
-import newsanalyzer.ctrl.NewsAnalyzerException;
+import newsanalyzer.ctrl.NewsApiException;
 import newsapi.NewsApi;
 import newsapi.NewsApiBuilder;
-import newsapi.beans.Article;
-import newsapi.beans.NewsReponse;
 import newsapi.enums.Category;
-import newsapi.enums.Country;
 import newsapi.enums.Endpoint;
 
 public class UserInterface 
@@ -34,13 +28,11 @@ public class UserInterface
 				.setDomains("com")
 				.setSourceCategory(Category.sports)
 				.createNewsApi();
-
-
 		try {
 			ctrl.process(sports);//newsApi_entertainment);
 		} catch (IOException e) {
 			e.printStackTrace();
-		} catch (NewsAnalyzerException e) {
+		} catch (NewsApiException e) {
 			e.printStackTrace();
 		}
 
@@ -62,7 +54,7 @@ public class UserInterface
 			System.out.println("URL stimmt nicht!");
 		} catch (IOException e) {
 			e.printStackTrace();
-		} catch (NewsAnalyzerException e) {
+		} catch (NewsApiException e) {
 			e.printStackTrace();
 		}
 	}
@@ -80,7 +72,7 @@ public class UserInterface
 			ctrl.process(health);//newsApi_entertainment);
 		} catch (IOException e) {
 			e.printStackTrace();
-		} catch (NewsAnalyzerException e) {
+		} catch (NewsApiException e) {
 			e.printStackTrace();
 		}
 	}
@@ -99,7 +91,7 @@ public class UserInterface
 		menu.insert("b", "Entertainment", this::getDataFromCtrl2);
 		menu.insert("c", "Health", this::getDataFromCtrl3);
 		//menu.insert("d", "Title sorted by length", this::getDataFromCtrl4);
-		menu.insert("d", "",this::getDataForCustomInput);
+		menu.insert("d", "Download last search",this::getDataForCustomInput);
 		menu.insert("q", "Quit", null);
 		Runnable choice;
 		while ((choice = menu.exec()) != null) {
